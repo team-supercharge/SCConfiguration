@@ -1,7 +1,8 @@
 language: objective-c
+osx_image: xcode6.4
 
 install:
 - gem install xcpretty --no-rdoc --no-ri --no-document --quiet
 
 script:
-- set -o pipefail && xcodebuild test -project Example/SCConfigurationExample.xcodeproj/ -scheme SCConfigurationExample -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO | xcpretty -c
+- set -o pipefail && xcodebuild test -project Example/SCConfigurationExample.xcodeproj/ -scheme SCConfigurationExample -destination OS=8.4,name=iPhone\ 6 -sdk iphonesimulator8.4 ONLY_ACTIVE_ARCH=NO | xcpretty -c
