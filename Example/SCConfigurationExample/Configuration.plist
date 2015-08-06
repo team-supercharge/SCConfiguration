@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>GLOBAL_ENV_STRING</key>
+	<string>global env value</string>
+	<key>ENV_STRING</key>
+	<dict>
+		<key>DEBUG</key>
+		<string>debug..</string>
+		<key>RELEASE</key>
+		<string>release!</string>
+	</dict>
+</dict>
+</plist>

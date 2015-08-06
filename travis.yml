@@ -1,0 +1,7 @@
+language: objective-c
+
+install:
+- gem install xcpretty --no-rdoc --no-ri --no-document --quiet
+
+script:
+- set -o pipefail && xcodebuild test -project Example/SCConfigurationExample.xcodeproj/ -scheme SCConfigurationExample -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO | xcpretty -c
