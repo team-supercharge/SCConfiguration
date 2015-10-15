@@ -1,5 +1,10 @@
 # SCConfiguration
 
+[![CI Status](http://img.shields.io/travis/team-supercharge/SCConfiguration.svg?style=flat)](https://travis-ci.org/team-supercharge/SCConfiguration)
+[![Version](https://img.shields.io/cocoapods/v/SCConfiguration.svg?style=flat)](http://cocoadocs.org/docsets/SCConfiguration)
+[![License](https://img.shields.io/cocoapods/l/SCConfiguration.svg?style=flat)](http://cocoadocs.org/docsets/SCConfiguration)
+[![Platform](https://img.shields.io/cocoapods/p/SCConfiguration.svg?style=flat)](http://cocoadocs.org/docsets/SCConfiguration)
+
 Made with ♥︎ at Supercharge
 
 ## Introduction
