@@ -134,7 +134,7 @@ iOS 6+
 
 ## Contributing
 
-Contributions are always welcome! (:
+Contributions are always welcome! :)
 
 1. Fork it ( http://github.com/team-supercharge/SCConfiguration/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
