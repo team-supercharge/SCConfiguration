@@ -1,19 +1,19 @@
 //
-//  ViewController.m
-//  SCConfigurationExample
+//  SCViewController.m
+//  SCConfiguration
 //
-//  Created by Gergő Németh on 04/08/15.
-//  Copyright (c) 2015 Supercharge. All rights reserved.
+//  Created by Gergő Németh on 04/10/2016.
+//  Copyright (c) 2016 Gergő Németh. All rights reserved.
 //
 
-#import "ViewController.h"
+#import "SCViewController.h"
 #import "SCConfiguration.h"
 
 #define GLOBAL_ENV_STRING_KEY @"GLOBAL_ENV_STRING"
 #define ENV_STRING_KEY @"ENV_STRING"
 #define NEW_STRING_KEY @"NEW_STRING"
 
-@implementation ViewController
+@implementation SCViewController
 
 #pragma mark - Lifecycle
 

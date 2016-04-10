@@ -1,0 +1,12 @@
+source 'https://github.com/CocoaPods/Specs.git'
+use_frameworks!
+
+target 'SCConfiguration_Example', :exclusive => true do
+  pod 'SCConfiguration', :path => '../'
+end
+
+target 'SCConfiguration_Tests', :exclusive => true do
+  pod 'SCConfiguration', :path => '../'
+
+  
+end

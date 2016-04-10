@@ -1,13 +1,12 @@
 //
-//  SCConfigurationExampleTests.m
-//  SCConfigurationExampleTests
+//  SCConfigurationTests.m
+//  SCConfigurationTests
 //
-//  Created by Gergő Németh on 04/08/15.
-//  Copyright (c) 2015 Supercharge. All rights reserved.
+//  Created by Gergő Németh on 04/10/2016.
+//  Copyright (c) 2016 Gergő Németh. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import <XCTest/XCTest.h>
+@import XCTest;
 #import "SCConfiguration.h"
 
 #define GLOBAL_ENV_STRING_KEY @"GLOBAL_ENV_STRING"
@@ -18,13 +17,11 @@
 
 #define LIBRARY_DIRECTORY_PATH [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"Configuration2.plist"]
 
-@interface SCConfigurationTests : XCTestCase
+@interface Tests : XCTestCase
 
 @end
 
-@implementation SCConfigurationTests
-
-#pragma mark - Setup and Teardown methods
+@implementation Tests
 
 - (void)setUp
 {
@@ -164,3 +161,4 @@
 }
 
 @end
+

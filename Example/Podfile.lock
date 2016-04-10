@@ -1,0 +1,14 @@
+PODS:
+  - SCConfiguration (1.0.0)
+
+DEPENDENCIES:
+  - SCConfiguration (from `../`)
+
+EXTERNAL SOURCES:
+  SCConfiguration:
+    :path: ../
+
+SPEC CHECKSUMS:
+  SCConfiguration: f1021c091c16a142c49b5ce340167c9613453fe8
+
+COCOAPODS: 0.39.0
