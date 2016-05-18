@@ -21,6 +21,7 @@
 #else
     [[SCConfiguration sharedInstance] setEnv:@"RELEASE"];
 #endif
+    [[SCConfiguration sharedInstance] setDecryptionPassword:@"SCConfigurationPass"];
 
     return YES;
 }

@@ -6,5 +6,5 @@ before_install:
 - pod install --project-directory=Example
 
 script:
-- set -o pipefail && xcodebuild test -workspace Example/SCConfiguration.xcworks$
+- set -o pipefail && xcodebuild test -workspace Example/R87AttributedString.xcworkspace -scheme R87AttributedString-Example -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO | xcpretty
 - pod lib lint

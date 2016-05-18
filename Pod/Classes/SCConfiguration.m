@@ -29,12 +29,17 @@
 //
 
 #import "SCConfiguration.h"
+#import "RNCryptor.h"
+#import "RNOpenSSLDecryptor.h"
+#import "RNOpenSSLEncryptor.h"
 
 #define LIBRARY_DIRECTORY_PATH [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"Configuration2.plist"]
+#define LIBRARY_ENCRYPTED_DIRECTORY_PATH [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"Configuration2.enc"]
 
 @interface SCConfiguration ()
 
 @property (strong, nonatomic) NSString *env;
+@property (strong, nonatomic) NSString *decryptionPassword;
 @property (strong, nonatomic) NSMutableDictionary *configuration;
 @property (assign, nonatomic, getter=isOverwritePersistent) BOOL overwritePersistent;
 
@@ -64,15 +69,47 @@
 {
     if (!_configuration)
     {
+#if DEBUG
         NSLog(@"INFO: ENVIRONMENT is %@", (self.env ?: @"not set"));
+#endif
 
-        NSString *path = [[NSBundle mainBundle] bundlePath];
-        NSString *finalPath = [path stringByAppendingPathComponent:@"Configuration.plist"];
-        _configuration = [NSMutableDictionary dictionaryWithContentsOfFile:finalPath];
+        if (!_decryptionPassword)
+        {
+            NSString *path = [[NSBundle mainBundle] bundlePath];
+            NSString *finalPath = [path stringByAppendingPathComponent:@"Configuration.plist"];
+            _configuration = [self loadFileFromPath:finalPath];
+        }
+        else // the config file is encrypted
+        {
+            NSString *path = [[NSBundle mainBundle] pathForResource:@"Configuration" ofType:@"enc"];
+            _configuration = [self loadFileFromPath:path];
+        }
+
+        NSAssert(_configuration, @"You need to create a Configuration.plist file to use SCConfiguration!");
 
         if (self.isOverwritePersistent)
         {
-            NSDictionary *configuration2 = [NSDictionary dictionaryWithContentsOfFile:LIBRARY_DIRECTORY_PATH];
+            NSDictionary *configuration2;
+            if (!_decryptionPassword)
+            {
+                configuration2 = [self loadFileFromPath:LIBRARY_DIRECTORY_PATH];
+            }
+            else // the config file is encrypted
+            {
+                // a non-encrypted version exists (the app used SCConfiguration before but without encryption
+                if ([[NSFileManager defaultManager] fileExistsAtPath:LIBRARY_DIRECTORY_PATH])
+                {
+                    configuration2 = [NSDictionary dictionaryWithContentsOfFile:LIBRARY_DIRECTORY_PATH];
+                    [self writeDictionary:configuration2 toFilePath:LIBRARY_ENCRYPTED_DIRECTORY_PATH];
+
+                    NSError *error;
+                    [[NSFileManager defaultManager] removeItemAtPath:LIBRARY_DIRECTORY_PATH error:&error];
+                }
+                else
+                {
+                    configuration2 = [self loadFileFromPath:LIBRARY_ENCRYPTED_DIRECTORY_PATH];
+                }
+            }
 
             [configuration2 enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
                 if (![self.protectedKeys containsObject:key])
@@ -100,6 +137,11 @@
     _env = env;
 }
 
+- (void)setDecryptionPassword:(NSString *)decryptionPassword
+{
+    _decryptionPassword = decryptionPassword;
+}
+
 #pragma mark - Lifecycle
 
 - (instancetype)init
@@ -118,9 +160,11 @@
 {
     if (self.isOverwritePersistent)
     {
-        NSLog(@"INFO: Configuration2.plist saved.");
+#if DEBUG
+        NSLog(@"INFO: Configuration2 file saved.");
+#endif
 
-        [self.configuration writeToFile:LIBRARY_DIRECTORY_PATH atomically:YES];
+        [self writeDictionary:self.configuration toFilePath:(!_decryptionPassword ? LIBRARY_DIRECTORY_PATH : LIBRARY_ENCRYPTED_DIRECTORY_PATH)];
     }
 }
 
@@ -130,7 +174,9 @@
 {
     if (self.configuration[varName] == nil)
     {
+#if DEBUG
         NSLog(@"INFO: '%@' key is missing from Configuration.plist", varName);
+#endif
         return nil;
     }
 
@@ -148,7 +194,9 @@
 
 - (void)setKeyToProtected:(NSString *)varName
 {
+#if DEBUG
     NSLog(@"INFO: the '%@' key is set to protected.", varName);
+#endif
 
     [self.protectedKeys addObject:varName];
 }
@@ -170,7 +218,9 @@
 
 - (void)removeKeyProtection:(NSString *)varName
 {
+#if DEBUG
     NSLog(@"INFO: the '%@' key is set to UNprotected.", varName);
+#endif
 
     [self.protectedKeys removeObject:varName];
 }
@@ -202,15 +252,57 @@
     [dictionary enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         if (![self.protectedKeys containsObject:key])
         {
+#if DEBUG
             NSLog(@"INFO: the '%@' key's value has been overwritten.", key);
+#endif
 
             self.configuration[key] = obj;
         }
         else
         {
+#if DEBUG
             NSLog(@"INFO: the '%@' key's value has NOT been overwritten because it's protected!", key);
+#endif
         }
     }];
+}
+
+#pragma mark - Private
+
+- (NSMutableDictionary *)loadFileFromPath:(NSString *)filePath
+{
+    NSMutableDictionary *result;
+
+    if (!_decryptionPassword)
+    {
+        result = [NSMutableDictionary dictionaryWithContentsOfFile:filePath];
+        return result;
+    }
+    else // the config file is encrypted
+    {
+        NSData *passEncryptedData =[[NSData alloc] initWithContentsOfFile:filePath];
+
+        NSError *error;
+        NSData *dataDecrypted = [RNOpenSSLDecryptor decryptData:passEncryptedData withSettings:kRNCryptorAES256Settings password:_decryptionPassword error:&error];
+        result = [NSPropertyListSerialization propertyListWithData:dataDecrypted options:NSPropertyListImmutable format:nil error:nil];
+        return result;
+    }
+}
+
+- (BOOL)writeDictionary:(NSMutableDictionary *)dictionary toFilePath:(NSString *)filePath
+{
+    if (!_decryptionPassword)
+    {
+        return [dictionary writeToFile:filePath atomically:YES];
+    }
+    else // the config file is encrypted
+    {
+        NSError *error;
+        NSData *dataToEncrypt = [NSPropertyListSerialization dataWithPropertyList:dictionary format:NSPropertyListBinaryFormat_v1_0 options:nil error:&error];
+
+        NSData *dataEncrypted = [RNOpenSSLEncryptor encryptData:dataToEncrypt withSettings:kRNCryptorAES256Settings password:_decryptionPassword error:&error];
+        return [dataEncrypted writeToFile:filePath atomically:YES];
+    }
 }
 
 @end

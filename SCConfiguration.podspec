@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name                = "SCConfiguration"
-  s.version             = "1.0.0"
-  s.summary             = "With SCConfiguration you can easily read environment-dependent config data from a certain plist file."
+  s.version             = "1.1.0"
+  s.summary             = "With SCConfiguration you can easily manage encrypted, environment dependent (or global) configuration parameters in a property list file."
 
   s.homepage            = "https://github.com/team-supercharge/SCConfiguration"
   s.source              = { :git => "https://github.com/team-supercharge/SCConfiguration.git", :tag => s.version.to_s }
@@ -17,4 +17,6 @@ Pod::Spec.new do |s|
   s.public_header_files = 'Pod/Classes/**/*.h'
 
   s.frameworks          = 'Foundation'
+
+  s.dependency            'RNCryptor', '~> 2.0'
 end
