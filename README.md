@@ -80,7 +80,8 @@ The initial problem here is that by default your Configuration.plist file will b
 The solution is to remove the plist file from the build, add it as encrypted file with the help of a custom run script and use the SCConfiguration library to read the encrypted file.
 
 **Encryption steps:**
-1) select your Configuration.plist file in Xcode and uncheck the target membership in the Utilities plane / File inspector tab:
+
+1) select your Configuration.plist file in Xcode and **UNCHECK** the target membership in the Utilities plane / File inspector tab:
 
 ![Uncheck membership](Images/encryption_step_1.png)
 
