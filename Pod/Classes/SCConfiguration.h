@@ -33,16 +33,20 @@
 /**
  This class can read predefined key-value pairs from a plist file called <code>Configuration.plist</code>.
 
- The config file may contain dictionaries with a provided key and inside every key may be a registry
- entry with the environments used in the application or the config file may contain global
+ The config file could contain dictionaries with a provided key and inside every key could be a registry
+ entry with the environments used in the application or the config file could contain global
  values which are not environment dependent.
 
  You have the ability to set certain keys protected or unprotected and you can overwite unprotected keys with a
  provided dictionary too. It's useful for example if you have a local config file but you want to overwite / add
  certain keys from an API.
 
- The overwrites can be set as persistant so it'll remain between application launches (this is the default behavior)
- or can be set to not persistant so the modification will be lost between application launches.
+ Overwrites can be set as persistent so it'll remain between application launches (this is the default behavior)
+ or can be set to not persistent so the modification will be lost between application launches.
+ 
+ You can encrypt Configuration file if it contains sensitive information.
+ 
+ @warning Encrypting the configuration file requires a custom Run Script in Xcode and some extra coding too.
  */
 @interface SCConfiguration : NSObject
 
@@ -79,6 +83,15 @@
 - (void)setEnv:(NSString *)env;
 
 /**
+ If you're using this library with an encrypted configuration file then you must use this method to set the password used to encrypt the initial config file.
+ 
+ @warning To use this library with encryption it's not enough to use this method! You need to remove the Configuration.plist file from your targets and set up the initial encryption in Xcode in a form of a custom Run Script! Please check the "Encrypting your Configuration file" section in the README file!
+
+ @param decryptionPassword The password used to encrypt the initial Configuration.plist file.
+ */
+- (void)setDecryptionPassword:(NSString *)decryptionPassword;
+
+/**
  This method returns the value of the config file with the provided key and environment.
 
  @param varName The name of a key, the method will return the value of the key. If the key does not exists then <code>nil</code> will be returned.
@@ -98,6 +111,8 @@
 
  You should call this method to the <code>applicationDidEnterBackground:</code> and
  <code>applicationWillTerminate</code> methods.
+ 
+ @note If you're using encrypted configuration file then this method will save modifications with encryption too.
  */
 - (void)tearDown;
 

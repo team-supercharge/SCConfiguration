@@ -1,0 +1,19 @@
+PODS:
+  - RNCryptor (2.2)
+  - SCConfiguration (1.0.0):
+    - RNCryptor (~> 2.0)
+
+DEPENDENCIES:
+  - SCConfiguration (from `../`)
+
+EXTERNAL SOURCES:
+  SCConfiguration:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  RNCryptor: c68678461a2c7474a55db9a6a98834c22d51f535
+  SCConfiguration: cd27b1d4566d1d0c861b28ab9ba3cdf7f9196818
+
+PODFILE CHECKSUM: 25fa3b69afd19a2eec86fab4e9ba7e9e5a6f5b2c
+
+COCOAPODS: 1.0.0

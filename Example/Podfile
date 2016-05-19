@@ -1,0 +1,16 @@
+source 'https://github.com/CocoaPods/Specs.git'
+platform :ios, '6.0'
+
+
+def shared_pods
+    pod 'SCConfiguration', :path => '../'
+end
+
+
+target 'SCConfiguration_Example' do
+    shared_pods
+end
+
+target 'SCConfiguration_Tests' do
+    shared_pods
+end

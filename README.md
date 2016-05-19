@@ -11,6 +11,8 @@ Made with ♥︎ at Supercharge
 
 With SCConfiguration you can easily manage environment dependent (or global) configuration parameters in a property list file.
 
+Moreover, from version 1.1.0 you can encrypt your configuration file if it contains sensitive information.
+
 ## Installation
 
 SCConfiguration is available through [CocoaPods](http://cocoapods.org). To install it, simply add the following line to your Podfile:
@@ -25,7 +27,7 @@ pod "SCConfiguration"
 
 First, you need to create a configuration file called `Configuration.plist` in your project.
 
-![Configuration.plist](plist.png)
+![Configuration.plist](Images/plist.png)
 
 You can add global or environment dependent key-value pairs to it, here's an example with `STAGING` and `PRODUCTION` environments.
 
@@ -69,11 +71,41 @@ You can also use `SCConfiguration` as a singleton:
 NSString *apiUrl = [[SCConfiguration sharedInstance] configValueForKey:@"API_URL"]
 ```
 
+### Encrypting your Configuration file
+
+If you're using v1.1.0 or above, with a few additional steps you can encrypt your configuration file. This is very useful if the file contains sensitive information such as production API URLs, third party App IDs or client secrets.
+
+The initial problem here is that by default your Configuration.plist file will be added to the .ipa file without encryption. If someone downloads your application from the App Store, unpacks the .ipa file and checks the app's contents, the Configuration file will be there as a plain XML file.
+
+The solution is to remove the plist file from the build, add it as encrypted file with the help of a custom run script and use the SCConfiguration library to read the encrypted file.
+
+**Encryption steps:**
+
+1) select your Configuration.plist file in Xcode and **UNCHECK** the target membership in the Utilities plane / File inspector tab:
+
+![Uncheck membership](Images/encryption_step_1.png)
+
+2) add a new custom Run Script to your project's Targets with the name `🛠 Encryption` and with the following content:
+
+```
+openssl enc -e -aes-256-cbc -in "$PROJECT_DIR/SCConfiguration/Configuration.plist" -out "$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/Configuration.enc" -pass pass:<your password here>
+```
+
+**IMPORTANT: You need to replace the Configuration.plist file's path to mach your project's structure and also you should add your own password to this script.**
+
+![Add custom Run Script](Images/encryption_step_2.png)
+
+3) you need to add an extra line to the `application:didFinishLaunchingWithOptions:` method:
+
+```objective-c
+[[SCConfiguration sharedInstance] setDecryptionPassword:@"<your password here>"];
+```
+
 ## Subclassing SCConfiguration
 
 It's a good practice to subclass `SCConfiguration` and declare your configuration parameters explicitly in your application.
 
-```
+```objective-c
 // MyAppConfiguration.h
 
 @interface MyAppConfiguration : SCConfiguration
@@ -83,7 +115,7 @@ It's a good practice to subclass `SCConfiguration` and declare your configuratio
 @end
 ```
 
-```
+```objective-c
 // MyAppConfiguration.m
 
 @interface MyAppConfiguration : SCConfiguration

@@ -1,8 +1,10 @@
 language: objective-c
-osx_image: xcode6.4
+podfile: Example/Podfile
 
-install:
-- gem install xcpretty --no-rdoc --no-ri --no-document --quiet
+before_install:
+- gem install activesupport # Need this because of travis
+- gem install cocoapods # Since Travis is not always on latest version
+- pod install --project-directory=Example
 
 script:
-- set -o pipefail && xcodebuild test -project Example/SCConfigurationExample.xcodeproj/ -scheme SCConfigurationExample -destination OS=8.4,name=iPhone\ 6 -sdk iphonesimulator8.4 ONLY_ACTIVE_ARCH=NO | xcpretty -c
+- set -o pipefail && xcodebuild test -workspace Example/SCConfiguration.xcworkspace -scheme SCConfiguration-Example -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO | xcpretty

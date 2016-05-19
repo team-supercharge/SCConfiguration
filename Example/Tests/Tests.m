@@ -1,13 +1,12 @@
 //
-//  SCConfigurationExampleTests.m
-//  SCConfigurationExampleTests
+//  SCConfigurationTests.m
+//  SCConfigurationTests
 //
-//  Created by Gergő Németh on 04/08/15.
-//  Copyright (c) 2015 Supercharge. All rights reserved.
+//  Created by Gergő Németh on 04/10/2016.
+//  Copyright (c) 2016 Gergő Németh. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import <XCTest/XCTest.h>
+@import XCTest;
 #import "SCConfiguration.h"
 
 #define GLOBAL_ENV_STRING_KEY @"GLOBAL_ENV_STRING"
@@ -16,15 +15,13 @@
 
 #define NEW_VALUE @"new value"
 
-#define LIBRARY_DIRECTORY_PATH [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"Configuration2.plist"]
+#define LIBRARY_ENCRYPTED_DIRECTORY_PATH [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"Configuration2.enc"]
 
-@interface SCConfigurationTests : XCTestCase
+@interface Tests : XCTestCase
 
 @end
 
-@implementation SCConfigurationTests
-
-#pragma mark - Setup and Teardown methods
+@implementation Tests
 
 - (void)setUp
 {
@@ -61,6 +58,7 @@
     SCConfiguration *config = [[SCConfiguration alloc] init];
     [config setEnv:@"DEBUG"];
     [config setOverwriteStateToPersistant:NO];
+    [config setDecryptionPassword:@"SCConfigurationPass"];
 
     // test if the right result comes or not
     configString = [config configValueForKey:GLOBAL_ENV_STRING_KEY];
@@ -85,6 +83,7 @@
     SCConfiguration *config = [[SCConfiguration alloc] init];
     [config setEnv:@"RELEASE"];
     [config setOverwriteStateToPersistant:NO];
+    [config setDecryptionPassword:@"SCConfigurationPass"];
 
     // test if the right result comes or not
     configString = [config configValueForKey:GLOBAL_ENV_STRING_KEY];
@@ -108,13 +107,14 @@
     SCConfiguration *config = [[SCConfiguration alloc] init];
     [config setEnv:@"DEBUG"];
     [config setOverwriteStateToPersistant:YES];
+    [config setDecryptionPassword:@"SCConfigurationPass"];
     [config tearDown];
 
     // after tearDown method a Configuration2.plist file should be exists
-    BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:LIBRARY_DIRECTORY_PATH];
+    BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:LIBRARY_ENCRYPTED_DIRECTORY_PATH];
     if (!fileExists)
     {
-        XCTFail(@"Configuration2.plist file should be exists!");
+        XCTFail(@"Configuration2.enc file should be exists!");
     }
 }
 
@@ -127,6 +127,7 @@
     SCConfiguration *config = [[SCConfiguration alloc] init];
     [config setEnv:@"DEBUG"];
     [config setOverwriteStateToPersistant:NO];
+    [config setDecryptionPassword:@"SCConfigurationPass"];
 
     [config setAllKeyToProtected];
     [config setKeyToProtected:NEW_STRING_KEY];
@@ -164,3 +165,4 @@
 }
 
 @end
+
