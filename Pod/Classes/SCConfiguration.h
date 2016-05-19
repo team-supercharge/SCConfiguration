@@ -41,8 +41,8 @@
  provided dictionary too. It's useful for example if you have a local config file but you want to overwite / add
  certain keys from an API.
 
- Overwrites can be set as persistant so it'll remain between application launches (this is the default behavior)
- or can be set to not persistant so the modification will be lost between application launches.
+ Overwrites can be set as persistent so it'll remain between application launches (this is the default behavior)
+ or can be set to not persistent so the modification will be lost between application launches.
  
  You can encrypt Configuration file if it contains sensitive information.
  

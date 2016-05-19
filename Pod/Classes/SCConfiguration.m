@@ -73,45 +73,15 @@
         NSLog(@"INFO: ENVIRONMENT is %@", (self.env ?: @"not set"));
 #endif
 
-        if (!_decryptionPassword)
-        {
-            NSString *path = [[NSBundle mainBundle] bundlePath];
-            NSString *finalPath = [path stringByAppendingPathComponent:@"Configuration.plist"];
-            _configuration = [self loadFileFromPath:finalPath];
-        }
-        else // the config file is encrypted
-        {
-            NSString *path = [[NSBundle mainBundle] pathForResource:@"Configuration" ofType:@"enc"];
-            _configuration = [self loadFileFromPath:path];
-        }
+        _configuration = [self getConfigurationFileContnet];
 
         NSAssert(_configuration, @"You need to create a Configuration.plist file to use SCConfiguration!");
 
         if (self.isOverwritePersistent)
         {
-            NSDictionary *configuration2;
-            if (!_decryptionPassword)
-            {
-                configuration2 = [self loadFileFromPath:LIBRARY_DIRECTORY_PATH];
-            }
-            else // the config file is encrypted
-            {
-                // a non-encrypted version exists (the app used SCConfiguration before but without encryption
-                if ([[NSFileManager defaultManager] fileExistsAtPath:LIBRARY_DIRECTORY_PATH])
-                {
-                    configuration2 = [NSDictionary dictionaryWithContentsOfFile:LIBRARY_DIRECTORY_PATH];
-                    [self writeDictionary:configuration2 toFilePath:LIBRARY_ENCRYPTED_DIRECTORY_PATH];
+            NSDictionary *persistentConfiguration = [self getPersistentConfigurationFileContnet];
 
-                    NSError *error;
-                    [[NSFileManager defaultManager] removeItemAtPath:LIBRARY_DIRECTORY_PATH error:&error];
-                }
-                else
-                {
-                    configuration2 = [self loadFileFromPath:LIBRARY_ENCRYPTED_DIRECTORY_PATH];
-                }
-            }
-
-            [configuration2 enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+            [persistentConfiguration enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
                 if (![self.protectedKeys containsObject:key])
                 {
                     _configuration[key] = obj;
@@ -268,6 +238,47 @@
 }
 
 #pragma mark - Private
+
+- (NSMutableDictionary *)getConfigurationFileContnet
+{
+    if (!_decryptionPassword)
+    {
+        NSString *path = [[NSBundle mainBundle] bundlePath];
+        NSString *finalPath = [path stringByAppendingPathComponent:@"Configuration.plist"];
+        return [self loadFileFromPath:finalPath];
+    }
+
+    // the config file is encrypted
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"Configuration" ofType:@"enc"];
+    return [self loadFileFromPath:path];
+}
+
+- (NSDictionary *)getPersistentConfigurationFileContnet
+{
+    if (!_decryptionPassword)
+    {
+        return [self loadFileFromPath:LIBRARY_DIRECTORY_PATH];
+    }
+
+    // the config file is encrypted
+    NSDictionary *result;
+
+    // if a non-encrypted version exists (the app used SCConfiguration before, but without encryption) replace it with an encrypted version
+    if ([[NSFileManager defaultManager] fileExistsAtPath:LIBRARY_DIRECTORY_PATH])
+    {
+        result = [NSDictionary dictionaryWithContentsOfFile:LIBRARY_DIRECTORY_PATH];
+        [self writeDictionary:result toFilePath:LIBRARY_ENCRYPTED_DIRECTORY_PATH];
+
+        NSError *error;
+        [[NSFileManager defaultManager] removeItemAtPath:LIBRARY_DIRECTORY_PATH error:&error];
+    }
+    else
+    {
+        result = [self loadFileFromPath:LIBRARY_ENCRYPTED_DIRECTORY_PATH];
+    }
+
+    return result;
+}
 
 - (NSMutableDictionary *)loadFileFromPath:(NSString *)filePath
 {
