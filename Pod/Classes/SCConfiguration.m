@@ -212,7 +212,7 @@
 
 #pragma mark - Overwite config
 
-- (void)setOverwriteStateToPersistant:(BOOL)state
+- (void)setOverwriteStateToPersistent:(BOOL)state
 {
     self.overwritePersistent = state;
 }
