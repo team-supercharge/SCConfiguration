@@ -147,7 +147,7 @@ NSDictionary *newConfigValues = @{ @"key1": @"new value", @"new key": @"new valu
 [[SCConfiguration sharedInstance] overwriteConfigWithDictionary:newConfigValues];
 ```
 
-**NOTE: overwritten key-value pairs will stay between application launches by default! You can change this behaivor by calling the `[[SCConfiguration sharedInstance] setOverwriteStateToPersistant:NO]`.**
+**NOTE: overwritten key-value pairs will stay between application launches by default! You can change this behaivor by calling the `[[SCConfiguration sharedInstance] setOverwriteStateToPersistent:NO]`.**
 
 Or you can **set key-value pairs to protected / unprotected**:
 

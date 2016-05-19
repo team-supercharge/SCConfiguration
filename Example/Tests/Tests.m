@@ -57,7 +57,7 @@
 
     SCConfiguration *config = [[SCConfiguration alloc] init];
     [config setEnv:@"DEBUG"];
-    [config setOverwriteStateToPersistant:NO];
+    [config setOverwriteStateToPersistent:NO];
     [config setDecryptionPassword:@"SCConfigurationPass"];
 
     // test if the right result comes or not
@@ -82,7 +82,7 @@
 
     SCConfiguration *config = [[SCConfiguration alloc] init];
     [config setEnv:@"RELEASE"];
-    [config setOverwriteStateToPersistant:NO];
+    [config setOverwriteStateToPersistent:NO];
     [config setDecryptionPassword:@"SCConfigurationPass"];
 
     // test if the right result comes or not
@@ -106,7 +106,7 @@
 {
     SCConfiguration *config = [[SCConfiguration alloc] init];
     [config setEnv:@"DEBUG"];
-    [config setOverwriteStateToPersistant:YES];
+    [config setOverwriteStateToPersistent:YES];
     [config setDecryptionPassword:@"SCConfigurationPass"];
     [config tearDown];
 
@@ -126,7 +126,7 @@
 
     SCConfiguration *config = [[SCConfiguration alloc] init];
     [config setEnv:@"DEBUG"];
-    [config setOverwriteStateToPersistant:NO];
+    [config setOverwriteStateToPersistent:NO];
     [config setDecryptionPassword:@"SCConfigurationPass"];
 
     [config setAllKeyToProtected];

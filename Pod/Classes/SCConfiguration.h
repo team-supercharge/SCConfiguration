@@ -179,14 +179,14 @@
 
  @param state A <code>BOOL</code> value which determinates if the overwrites should remain between application launches or not.
  */
-- (void)setOverwriteStateToPersistant:(BOOL)state;
+- (void)setOverwriteStateToPersistent:(BOOL)state;
 
 /**
  You can overwrite the unprotected parts of the config dictionary with this method.
  It's useful for example if you want to change predefined config values from an API.
 
  @warning A key will be overwritten only if it's not set as protected before!
- @warning Overwrites will be saved between application launches by default but this functionality can be turned off with the <code>setOverwriteStateToPersistant:</code> method.
+ @warning Overwrites will be saved between application launches by default but this functionality can be turned off with the <code>setOverwriteStateToPersistent:</code> method.
 
  @param dictionary An <code>NSDictionary</code> class containing key-value pairs which should be overwritten in the initial configuration file.
  */

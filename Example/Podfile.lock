@@ -1,6 +1,6 @@
 PODS:
   - RNCryptor (2.2)
-  - SCConfiguration (1.0.0):
+  - SCConfiguration (2.0.0):
     - RNCryptor (~> 2.0)
 
 DEPENDENCIES:
@@ -12,7 +12,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   RNCryptor: c68678461a2c7474a55db9a6a98834c22d51f535
-  SCConfiguration: cd27b1d4566d1d0c861b28ab9ba3cdf7f9196818
+  SCConfiguration: 6641aca330415f0ab2b7df44a24e71ecc6ebc8a0
 
 PODFILE CHECKSUM: 25fa3b69afd19a2eec86fab4e9ba7e9e5a6f5b2c
 
