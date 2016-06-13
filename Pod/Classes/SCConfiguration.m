@@ -73,13 +73,13 @@
         NSLog(@"INFO: ENVIRONMENT is %@", (self.env ?: @"not set"));
 #endif
 
-        _configuration = [self getConfigurationFileContnet];
+        _configuration = [self getConfigurationFileContent];
 
         NSAssert(_configuration, @"You need to create a Configuration.plist file to use SCConfiguration!");
 
         if (self.isOverwritePersistent)
         {
-            NSDictionary *persistentConfiguration = [self getPersistentConfigurationFileContnet];
+            NSDictionary *persistentConfiguration = [self getPersistentConfigurationFileContent];
 
             [persistentConfiguration enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
                 if (![self.protectedKeys containsObject:key])
@@ -239,7 +239,7 @@
 
 #pragma mark - Private
 
-- (NSMutableDictionary *)getConfigurationFileContnet
+- (NSMutableDictionary *)getConfigurationFileContent
 {
     if (!_decryptionPassword)
     {
@@ -253,7 +253,7 @@
     return [self loadFileFromPath:path];
 }
 
-- (NSDictionary *)getPersistentConfigurationFileContnet
+- (NSDictionary *)getPersistentConfigurationFileContent
 {
     if (!_decryptionPassword)
     {
