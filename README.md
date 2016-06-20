@@ -85,7 +85,7 @@ The solution is to remove the plist file from the build, add it as encrypted fil
 
 ![Uncheck membership](Images/encryption_step_1.png)
 
-2) add a new custom Run Script to your project's Targets with the name `🛠 Encryption` and with the following content:
+2) add a new custom Run Script to your project's Targets with the name `Encryption` and with the following content:
 
 ```
 openssl enc -e -aes-256-cbc -in "$PROJECT_DIR/SCConfiguration/Configuration.plist" -out "$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/Configuration.enc" -pass pass:<your password here>
@@ -128,7 +128,7 @@ It's a good practice to subclass `SCConfiguration` and declare your configuratio
 @end
 ```
 
-## Overriding configuartion variables
+## Overriding configuration variables
 
 You can override configuration variable at runtime. This can be useful if you would like to synchronize configuration parameters through a backend service.
 
@@ -147,7 +147,7 @@ NSDictionary *newConfigValues = @{ @"key1": @"new value", @"new key": @"new valu
 [[SCConfiguration sharedInstance] overwriteConfigWithDictionary:newConfigValues];
 ```
 
-**NOTE: overwritten key-value pairs will stay between application launches by default! You can change this behaivor by calling the `[[SCConfiguration sharedInstance] setOverwriteStateToPersistent:NO]`.**
+**NOTE: overwritten key-value pairs will stay between application launches by default! You can change this behaviour by calling the `[[SCConfiguration sharedInstance] setOverwriteStateToPersistent:NO]`.**
 
 Or you can **set key-value pairs to protected / unprotected**:
 
