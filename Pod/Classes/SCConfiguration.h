@@ -43,9 +43,9 @@
 
  Overwrites can be set as persistent so it'll remain between application launches (this is the default behavior)
  or can be set to not persistent so the modification will be lost between application launches.
- 
+
  You can encrypt Configuration file if it contains sensitive information.
- 
+
  @warning Encrypting the configuration file requires a custom Run Script in Xcode and some extra coding too.
  */
 @interface SCConfiguration : NSObject
@@ -58,7 +58,7 @@
 
 /**
  Returns the shared instance of the receiver class, creating it if necessary.
- 
+
  You shoudn't override this method in your subclasses.
 
  @return Shared instance of the receiver class.
@@ -84,7 +84,7 @@
 
 /**
  If you're using this library with an encrypted configuration file then you must use this method to set the password used to encrypt the initial config file.
- 
+
  @warning To use this library with encryption it's not enough to use this method! You need to remove the Configuration.plist file from your targets and set up the initial encryption in Xcode in a form of a custom Run Script! Please check the "Encrypting your Configuration file" section in the README file!
 
  @param decryptionPassword The password used to encrypt the initial Configuration.plist file.
@@ -111,7 +111,7 @@
 
  You should call this method to the <code>applicationDidEnterBackground:</code> and
  <code>applicationWillTerminate</code> methods.
- 
+
  @note If you're using encrypted configuration file then this method will save modifications with encryption too.
  */
 - (void)tearDown;
