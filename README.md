@@ -142,6 +142,14 @@ This method saves the configuration modifications between application launches.
 
 You can **overwrite / add key-value pairs**:
 
+* one-by-one:
+
+```objective-c
+[[SCConfiguration sharedInstance] setObject:@"a value" forKey:@"key1"];
+```
+
+* multiple keys at the same time:
+
 ```objective-c
 NSDictionary *newConfigValues = @{ @"key1": @"new value", @"new key": @"new value" };
 [[SCConfiguration sharedInstance] overwriteConfigWithDictionary:newConfigValues];

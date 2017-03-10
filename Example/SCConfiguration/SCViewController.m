@@ -12,6 +12,7 @@
 #define GLOBAL_ENV_STRING_KEY @"GLOBAL_ENV_STRING"
 #define ENV_STRING_KEY @"ENV_STRING"
 #define NEW_STRING_KEY @"NEW_STRING"
+#define SINGLE_STRING_KEY @"SINGLE_STRING"
 
 @implementation SCViewController
 
@@ -42,6 +43,12 @@
 
     // overwrite unprotected keys
     [[SCConfiguration sharedInstance] overwriteConfigWithDictionary:newConfigValues];
+
+    // overwrite one unprotected key
+    [[SCConfiguration sharedInstance] setObject:@"single string.." forKey:SINGLE_STRING_KEY];
+
+    // remove unprotected key
+    [[SCConfiguration sharedInstance] setObject:nil forKey:SINGLE_STRING_KEY];
 
     // show values
     [self showConfigValues];

@@ -247,6 +247,21 @@
     }];
 }
 
+- (void)setObject:(id)object forKey:(NSString *)key
+{
+    if (!key.length)
+    {
+        return;
+    }
+
+    if (object == nil)
+    {
+        object = [NSNull null];
+    }
+
+    [self overwriteConfigWithDictionary:@{key: object}];
+}
+
 #pragma mark - Private
 
 - (NSMutableDictionary *)getConfigurationFileContent

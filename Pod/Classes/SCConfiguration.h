@@ -181,6 +181,18 @@
  */
 - (void)setOverwriteStateToPersistent:(BOOL)state;
 
+
+/**
+ You can overwrite a single -unprotected- part of the config file with this method.
+
+ @warning A key will be overwritten only if it's not set as protected before!
+ @warning Overwrites will be saved between application launches by default but this functionality can be turned off with the <code>setOverwriteStateToPersistent:</code> method.
+
+ @param object The object you want to save locally.
+ @param key The key for the object you want to save.
+ */
+- (void)setObject:(id)object forKey:(NSString *)key;
+
 /**
  You can overwrite the unprotected parts of the config dictionary with this method.
  It's useful for example if you want to change predefined config values from an API.
