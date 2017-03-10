@@ -245,6 +245,8 @@
 #endif
         }
     }];
+
+    [self tearDown];
 }
 
 - (void)setObject:(id)object forKey:(NSString *)key
