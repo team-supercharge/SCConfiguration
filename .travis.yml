@@ -2,7 +2,7 @@ language: objective-c
 podfile: Example/Podfile
 
 before_install:
-- gem install activesupport # Need this because of travis
+- gem install activesupport -v 4.2.6 # Need this because of travis
 - gem install cocoapods # Since Travis is not always on latest version
 - pod install --project-directory=Example
 

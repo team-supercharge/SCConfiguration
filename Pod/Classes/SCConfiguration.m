@@ -222,11 +222,21 @@
     [dictionary enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         if (![self.protectedKeys containsObject:key])
         {
+            if ([obj isKindOfClass:[NSNull class]])
+            {
 #if DEBUG
-            NSLog(@"INFO: the '%@' key's value has been overwritten.", key);
+                NSLog(@"INFO: the '%@' key's value has been removed.", key);
+#endif
+                self.configuration[key] = nil;
+            }
+            else
+            {
+#if DEBUG
+                NSLog(@"INFO: the '%@' key's value has been overwritten.", key);
 #endif
 
-            self.configuration[key] = obj;
+                self.configuration[key] = obj;
+            }
         }
         else
         {
@@ -235,6 +245,23 @@
 #endif
         }
     }];
+
+    [self tearDown];
+}
+
+- (void)setObject:(id)object forKey:(NSString *)key
+{
+    if (!key.length)
+    {
+        return;
+    }
+
+    if (object == nil)
+    {
+        object = [NSNull null];
+    }
+
+    [self overwriteConfigWithDictionary:@{key: object}];
 }
 
 #pragma mark - Private

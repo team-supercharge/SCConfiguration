@@ -132,15 +132,15 @@ It's a good practice to subclass `SCConfiguration` and declare your configuratio
 
 You can override configuration variable at runtime. This can be useful if you would like to synchronize configuration parameters through a backend service.
 
-You need to add the following line to the `applicationDidEnterBackground:` and `applicationWillTerminate:` methods:
+You can **overwrite / add key-value pairs**:
+
+* one-by-one:
 
 ```objective-c
-[[SCConfiguration sharedInstance] tearDown];
+[[SCConfiguration sharedInstance] setObject:@"a value" forKey:@"key1"];
 ```
 
-This method saves the configuration modifications between application launches.
-
-You can **overwrite / add key-value pairs**:
+* multiple keys at the same time:
 
 ```objective-c
 NSDictionary *newConfigValues = @{ @"key1": @"new value", @"new key": @"new value" };

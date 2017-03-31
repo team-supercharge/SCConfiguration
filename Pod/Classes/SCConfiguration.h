@@ -43,9 +43,9 @@
 
  Overwrites can be set as persistent so it'll remain between application launches (this is the default behavior)
  or can be set to not persistent so the modification will be lost between application launches.
- 
+
  You can encrypt Configuration file if it contains sensitive information.
- 
+
  @warning Encrypting the configuration file requires a custom Run Script in Xcode and some extra coding too.
  */
 @interface SCConfiguration : NSObject
@@ -58,7 +58,7 @@
 
 /**
  Returns the shared instance of the receiver class, creating it if necessary.
- 
+
  You shoudn't override this method in your subclasses.
 
  @return Shared instance of the receiver class.
@@ -84,7 +84,7 @@
 
 /**
  If you're using this library with an encrypted configuration file then you must use this method to set the password used to encrypt the initial config file.
- 
+
  @warning To use this library with encryption it's not enough to use this method! You need to remove the Configuration.plist file from your targets and set up the initial encryption in Xcode in a form of a custom Run Script! Please check the "Encrypting your Configuration file" section in the README file!
 
  @param decryptionPassword The password used to encrypt the initial Configuration.plist file.
@@ -111,7 +111,7 @@
 
  You should call this method to the <code>applicationDidEnterBackground:</code> and
  <code>applicationWillTerminate</code> methods.
- 
+
  @note If you're using encrypted configuration file then this method will save modifications with encryption too.
  */
 - (void)tearDown;
@@ -180,6 +180,18 @@
  @param state A <code>BOOL</code> value which determinates if the overwrites should remain between application launches or not.
  */
 - (void)setOverwriteStateToPersistent:(BOOL)state;
+
+
+/**
+ You can overwrite a single -unprotected- part of the config file with this method.
+
+ @warning A key will be overwritten only if it's not set as protected before!
+ @warning Overwrites will be saved between application launches by default but this functionality can be turned off with the <code>setOverwriteStateToPersistent:</code> method.
+
+ @param object The object you want to save locally.
+ @param key The key for the object you want to save.
+ */
+- (void)setObject:(id)object forKey:(NSString *)key;
 
 /**
  You can overwrite the unprotected parts of the config dictionary with this method.
