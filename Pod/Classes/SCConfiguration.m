@@ -235,18 +235,30 @@
         {
             if ([obj isKindOfClass:[NSNull class]])
             {
+                NSDictionary *originalConfiguration = [self getConfigurationFileContent];
+
+                if ([originalConfiguration.allKeys containsObject:key])
+                {
+                    self.configuration[key] = originalConfiguration[key];
 #if DEBUG
-                NSLog(@"ℹ️ INFO: the '%@' key's value has been removed.", key);
+                    NSLog(@"ℹ️ INFO: the '%@' key's value has been reset to the default value: '%@'.", key, originalConfiguration[key][self.env]);
 #endif
-                self.configuration[key] = nil;
+                }
+                else
+                {
+                    self.configuration[key] = nil;
+#if DEBUG
+                    NSLog(@"ℹ️ INFO: the '%@' key's value has been removed.", key);
+#endif
+                }
             }
             else
             {
+                self.configuration[key] = obj;
+
 #if DEBUG
                 NSLog(@"ℹ️ INFO: the '%@' key's value has been overwritten.", key);
 #endif
-
-                self.configuration[key] = obj;
             }
         }
         else
