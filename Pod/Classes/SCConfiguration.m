@@ -134,7 +134,18 @@
         NSLog(@"ℹ️ INFO: Configuration2 file saved.");
 #endif
 
-        [self writeDictionary:self.configuration toFilePath:(!_decryptionPassword ? LIBRARY_DIRECTORY_PATH : LIBRARY_ENCRYPTED_DIRECTORY_PATH)];
+        NSMutableDictionary *configurationToSave = [self.configuration mutableCopy];
+        NSDictionary *originalConfiguration = [self getConfigurationFileContent];
+
+        for (NSString *key in self.configuration)
+        {
+            if ([originalConfiguration[key] isEqual:configurationToSave[key]])
+            {
+                [configurationToSave removeObjectForKey:key];
+            }
+        }
+
+        [self writeDictionary:configurationToSave toFilePath:(!_decryptionPassword ? LIBRARY_DIRECTORY_PATH : LIBRARY_ENCRYPTED_DIRECTORY_PATH)];
     }
 }
 
