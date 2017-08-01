@@ -70,12 +70,12 @@
     if (!_configuration)
     {
 #if DEBUG
-        NSLog(@"INFO: ENVIRONMENT is %@", (self.env ?: @"not set"));
+        NSLog(@"ℹ️ INFO: ENVIRONMENT is %@", (self.env ?: @"not set"));
 #endif
 
         _configuration = [self getConfigurationFileContent];
 
-        NSAssert(_configuration, @"You need to create a Configuration.plist file to use SCConfiguration!");
+        NSAssert(_configuration, @"⚠️⚠️⚠️ You need to create a Configuration.plist file to use SCConfiguration!");
 
         if (self.isOverwritePersistent)
         {
@@ -131,7 +131,7 @@
     if (self.isOverwritePersistent)
     {
 #if DEBUG
-        NSLog(@"INFO: Configuration2 file saved.");
+        NSLog(@"ℹ️ INFO: Configuration2 file saved.");
 #endif
 
         [self writeDictionary:self.configuration toFilePath:(!_decryptionPassword ? LIBRARY_DIRECTORY_PATH : LIBRARY_ENCRYPTED_DIRECTORY_PATH)];
@@ -145,7 +145,7 @@
     if (self.configuration[varName] == nil)
     {
 #if DEBUG
-        NSLog(@"INFO: '%@' key is missing from Configuration.plist", varName);
+        NSLog(@"ℹ️ INFO: '%@' key is missing from Configuration.plist", varName);
 #endif
         return nil;
     }
@@ -165,7 +165,7 @@
 - (void)setKeyToProtected:(NSString *)varName
 {
 #if DEBUG
-    NSLog(@"INFO: the '%@' key is set to protected.", varName);
+    NSLog(@"ℹ️ INFO: the '%@' key is set to protected.", varName);
 #endif
 
     [self.protectedKeys addObject:varName];
@@ -189,7 +189,7 @@
 - (void)removeKeyProtection:(NSString *)varName
 {
 #if DEBUG
-    NSLog(@"INFO: the '%@' key is set to UNprotected.", varName);
+    NSLog(@"ℹ️ INFO: the '%@' key is set to UNprotected.", varName);
 #endif
 
     [self.protectedKeys removeObject:varName];
@@ -225,14 +225,14 @@
             if ([obj isKindOfClass:[NSNull class]])
             {
 #if DEBUG
-                NSLog(@"INFO: the '%@' key's value has been removed.", key);
+                NSLog(@"ℹ️ INFO: the '%@' key's value has been removed.", key);
 #endif
                 self.configuration[key] = nil;
             }
             else
             {
 #if DEBUG
-                NSLog(@"INFO: the '%@' key's value has been overwritten.", key);
+                NSLog(@"ℹ️ INFO: the '%@' key's value has been overwritten.", key);
 #endif
 
                 self.configuration[key] = obj;
@@ -241,7 +241,7 @@
         else
         {
 #if DEBUG
-            NSLog(@"INFO: the '%@' key's value has NOT been overwritten because it's protected!", key);
+            NSLog(@"ℹ️ INFO: the '%@' key's value has NOT been overwritten because it's protected!", key);
 #endif
         }
     }];

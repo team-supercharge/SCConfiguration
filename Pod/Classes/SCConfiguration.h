@@ -175,12 +175,11 @@
 /**
  You can set with this method if you want to keep changes between application launches or not.
 
- By default this behavior is set to <code>YES</code>.
+ By default this behavior is set to <code>YES</code>, which means changes are kept between application launches.
 
  @param state A <code>BOOL</code> value which determinates if the overwrites should remain between application launches or not.
  */
 - (void)setOverwriteStateToPersistent:(BOOL)state;
-
 
 /**
  You can overwrite a single -unprotected- part of the config file with this method.
