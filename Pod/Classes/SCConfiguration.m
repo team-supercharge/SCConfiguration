@@ -29,9 +29,7 @@
 //
 
 #import "SCConfiguration.h"
-#import "RNCryptor.h"
-#import "RNOpenSSLDecryptor.h"
-#import "RNOpenSSLEncryptor.h"
+#import "SCCryptographyHelper.h"
 
 #define LIBRARY_DIRECTORY_PATH [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"Configuration2.plist"]
 #define LIBRARY_ENCRYPTED_DIRECTORY_PATH [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"Configuration2.enc"]
@@ -341,10 +339,9 @@
     }
     else // the config file is encrypted
     {
-        NSData *passEncryptedData =[[NSData alloc] initWithContentsOfFile:filePath];
+        NSData *passEncryptedData = [[NSData alloc] initWithContentsOfFile:filePath];
 
-        NSError *error;
-        NSData *dataDecrypted = [RNOpenSSLDecryptor decryptData:passEncryptedData withSettings:kRNCryptorAES256Settings password:_decryptionPassword error:&error];
+        NSData *dataDecrypted = [SCCryptographyHelper decryptData:passEncryptedData withPassword:_decryptionPassword];
         result = [NSPropertyListSerialization propertyListWithData:dataDecrypted options:NSPropertyListImmutable format:nil error:nil];
         return result;
     }
@@ -359,9 +356,9 @@
     else // the config file is encrypted
     {
         NSError *error;
-        NSData *dataToEncrypt = [NSPropertyListSerialization dataWithPropertyList:dictionary format:NSPropertyListBinaryFormat_v1_0 options:nil error:&error];
+        NSData *dataToEncrypt = [NSPropertyListSerialization dataWithPropertyList:dictionary format:NSPropertyListBinaryFormat_v1_0 options:0 error:&error];
 
-        NSData *dataEncrypted = [RNOpenSSLEncryptor encryptData:dataToEncrypt withSettings:kRNCryptorAES256Settings password:_decryptionPassword error:&error];
+        NSData *dataEncrypted = [SCCryptographyHelper encryptData:dataToEncrypt withPassword:_decryptionPassword];
         return [dataEncrypted writeToFile:filePath atomically:YES];
     }
 }
